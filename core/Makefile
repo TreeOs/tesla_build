@@ -1713,7 +1713,27 @@ otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 tesla: otapackage
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(TESLA_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(TESLA_TARGET_PACKAGE) > $(TESLA_TARGET_PACKAGE).md5sum
-	@echo -e ${CL_CYN}"Package Complete: $(TESLA_TARGET_PACKAGE)"${CL_RST}
+	@echo -e ${CL_BLU}""${CL_BLU}
+	@echo -e ${CL_BLU}"    ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄            ▄▄▄▄▄▄▄▄▄▄▄ "${CL_BLU}
+	@echo -e ${CL_BLU}"   ▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░▌          ▐░░░░░░░░░░░▌"${CL_BLU}
+	@echo -e ${CL_BLU}"    ▀▀▀▀█░█▀▀▀▀ ▐░█▀▀▀▀▀▀▀▀▀ ▐░█▀▀▀▀▀▀▀▀▀ ▐░▌          ▐░█▀▀▀▀▀▀▀█░▌"${CL_BLU}
+	@echo -e ${CL_BLU}"        ▐░▌     ▐░▌          ▐░▌          ▐░▌          ▐░▌       ▐░▌"${CL_BLU}
+	@echo -e ${CL_BLU}"        ▐░▌     ▐░█▄▄▄▄▄▄▄▄▄ ▐░█▄▄▄▄▄▄▄▄▄ ▐░▌          ▐░█▄▄▄▄▄▄▄█░▌"${CL_BLU}
+	@echo -e ${CL_BLU}"        ▐░▌     ▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░▌          ▐░░░░░░░░░░░▌"${CL_BLU}
+	@echo -e ${CL_BLU}"        ▐░▌     ▐░█▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀█░▌▐░▌          ▐░█▀▀▀▀▀▀▀█░▌"${CL_BLU}
+	@echo -e ${CL_BLU}"        ▐░▌     ▐░▌                    ▐░▌▐░▌          ▐░▌       ▐░▌"${CL_BLU}
+	@echo -e ${CL_BLU}"        ▐░▌     ▐░█▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄█░▌▐░█▄▄▄▄▄▄▄▄▄ ▐░▌       ▐░▌"${CL_BLU}
+	@echo -e ${CL_BLU}"        ▐░▌     ▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░▌       ▐░▌"${CL_BLU}
+	@echo -e ${CL_BLU}"         ▀       ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀         ▀ "${CL_BLU}
+	@echo -e ${CL_BLU}"                           A Ground Zero Roms "${CL_BLU}
+	@echo -e ${CL_BLU}"                                Project      "${CL_BLU}
+	@echo -e ${CL_CYN}"Package Complete: $(TESLA_TARGET_PACKAGE)"${CL_CYAN}${CL_RST}
+endif
+
+ifeq ($(LIQUID_CHANGELOG),true)
+# Generate changelog
+	$(hide) ./vendor/tesla/tools/changelog
+	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(TESLA_VERSION)-$(TARGET_PRODUCT).txt
 
 bootzip: bootimage
 	$(BOOT_ZIP_FROM_IMAGE_SCRIPT) \
