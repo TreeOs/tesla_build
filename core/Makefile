@@ -1730,7 +1730,7 @@ tesla: otapackage
 	@echo -e ${CL_CYN}"Package Complete: $(TESLA_TARGET_PACKAGE)"${CL_CYAN}${CL_RST}
 endif
 
-ifeq ($(LIQUID_CHANGELOG),true)
+ifeq ($(TESLA_CHANGELOG),true)
 # Generate changelog
 	$(hide) ./vendor/tesla/tools/changelog
 	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(TESLA_VERSION)-$(TARGET_PRODUCT).txt
