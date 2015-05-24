@@ -1037,6 +1037,7 @@ FULL_SYSTEMIMAGE_DEPS := $(INTERNAL_SYSTEMIMAGE_FILES) $(INTERNAL_USERIMAGES_DEP
 # system image.
 INSTALLED_FILES_FILE := $(PRODUCT_OUT)/installed-files.txt
 $(INSTALLED_FILES_FILE): $(FULL_SYSTEMIMAGE_DEPS)
+	$(hide) ./vendor/tesla/tools/changelog
 	@echo Installed file list: $@
 	@mkdir -p $(dir $@)
 	@rm -f $@
@@ -1729,11 +1730,6 @@ tesla: otapackage
 	@echo -e ${CL_BLU}"                                Project      "${CL_BLU}
 	@echo -e ${CL_CYN}"Package Complete: $(TESLA_TARGET_PACKAGE)"${CL_CYAN}${CL_RST}
 endif
-
-ifeq ($(TESLA_CHANGELOG),true)
-# Generate changelog
-	$(hide) ./vendor/tesla/tools/changelog
-	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(TESLA_VERSION)-$(TARGET_PRODUCT).txt
 
 bootzip: bootimage
 	$(BOOT_ZIP_FROM_IMAGE_SCRIPT) \
