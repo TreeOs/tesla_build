@@ -1750,6 +1750,7 @@ bootzip: bootimage
 endif    # recovery_fstab is defined
 endif    # TARGET_NO_KERNEL != true
 endif    # TARGET_DEVICE != generic*
+endif
 
 # -----------------------------------------------------------------
 # The update package
