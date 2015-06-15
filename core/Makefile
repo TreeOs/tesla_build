@@ -2060,7 +2060,6 @@ include $(sort $(wildcard $(BUILD_SYSTEM)/tasks/*.mk))
 -include $(sort $(wildcard vendor/*/*/build/tasks/*.mk))
 -include $(sort $(wildcard device/*/*/build/tasks/*.mk))
 endif
-endif
 
 # -----------------------------------------------------------------
 # Create SDK repository packages. Must be done after tasks/* since
