@@ -1694,6 +1694,7 @@ ifneq ($(TARGET_UNIFIED_DEVICE),)
 endif
 
 ifneq ($(BLOCK_BASED_OTA),false)
+
     $(INTERNAL_OTA_PACKAGE_TARGET): block_based := --block
 endif
 
@@ -1739,7 +1740,6 @@ tesla: otapackage
 	@echo -e ${CL_BLU}"                           A Ground Zero Roms "${CL_BLU}
 	@echo -e ${CL_BLU}"                                Project      "${CL_BLU}
 	@echo -e ${CL_CYN}"Package Complete: $(TESLA_TARGET_PACKAGE)"${CL_CYAN}${CL_RST}
-endif
 
 bootzip: bootimage
 	$(BOOT_ZIP_FROM_IMAGE_SCRIPT) \
