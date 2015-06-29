@@ -516,7 +516,7 @@ function print_lunch_menu()
     done | column
 
     if [ "z${TESLA_DEVICES_ONLY}" != "z" ]; then
-       echo "... and don't forget the bacon!"
+       echo "... and don't forget the Lightning!"
     fi
 
     echo
@@ -526,7 +526,7 @@ function brunch()
 {
     breakfast $*
     if [ $? -eq 0 ]; then
-        mka bacon
+        mka tesla
     else
         echo "No such item in brunch menu. Try 'breakfast'"
         return 1
