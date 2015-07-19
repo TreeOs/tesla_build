@@ -48,13 +48,37 @@ $(combo_var_prefix)HAVE_STRERROR_R_STRRET := 1
 $(combo_var_prefix)HAVE_STRLCPY := 0
 $(combo_var_prefix)HAVE_STRLCAT := 0
 $(combo_var_prefix)HAVE_KERNEL_MODULES := 0
-
+ifeq ($(PULSE),true)
+$(combo_var_prefix)GLOBAL_CFLAGS := -O3 -DNDEBUG -pipe -fivopts -ffunction-sections -fdata-sections -funswitch-loops -fomit-frame-pointer -ftracer -Wno-unused-parameter -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-exceptions -Wno-multichar $(call cc-option,$(-fira-loop-pressure,-fforce-addr,-funsafe-loop-optimizations,-funroll-loops,-ftree-loop-distribution,-fsection-anchors,-ftree-loop-im,-ftree-loop-ivcanon,-ffunction-sections,-fgcse-las,-fgcse-sm,-fweb,-ffp-contract=fast,-fgraphite,-floop-flatten,-floop-parallelize-all,-ftree-loop-linear,-floop-interchange,-floop-strip-mine,-floop-block))
+$(combo_var_prefix)RELEASE_CFLAGS := -O3 -DNDEBUG -pipe -fivopts -ffunction-sections -fdata-sections -funswitch-loops -fomit-frame-pointer -ftracer -Wno-unused-parameter -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-strict-aliasing $(call cc-option,$(-fira-loop-pressure,-fforce-addr,-funsafe-loop-optimizations,-funroll-loops,-ftree-loop-distribution,-fsection-anchors,-ftree-loop-im,-ftree-loop-ivcanon,-ffunction-sections,-fgcse-las,-fgcse-sm,-fweb,-ffp-contract=fast,-fgraphite,-floop-flatten,-floop-parallelize-all,-ftree-loop-linear,-floop-interchange,-floop-strip-mine,-floop-block))
+$(combo_var_prefix)GLOBAL_CPPFLAGS := -O3 -DNDEBUG -pipe -fivopts -ffunction-sections -fdata-sections -funswitch-loops -fomit-frame-pointer -ftracer -Wno-unused-parameter -Wno-unused-but-set-variable -Wno-maybe-uninitialized $(call cpp-option,$(-fira-loop-pressure,-fforce-addr,-funsafe-loop-optimizations,-funroll-loops,-ftree-loop-distribution,-fsection-anchors,-ftree-loop-im,-ftree-loop-ivcanon,-ffunction-sections,-fgcse-las,-fgcse-sm,-fweb,-ffp-contract=fast,-fgraphite,-floop-flatten,-floop-parallelize-all,-ftree-loop-linear,-floop-interchange,-floop-strip-mine,-floop-block))
+$(combo_var_prefix)GLOBAL_LDFLAGS := -Wl,-O1 -Wl,--as-needed -Wl,--relax -Wl,--sort-common -Wl,--gc-sections
+else
 $(combo_var_prefix)GLOBAL_CFLAGS := -fno-exceptions -Wno-multichar
 $(combo_var_prefix)RELEASE_CFLAGS := -O2 -g -fno-strict-aliasing
 $(combo_var_prefix)GLOBAL_CPPFLAGS :=
 $(combo_var_prefix)GLOBAL_LDFLAGS :=
+endif
 $(combo_var_prefix)GLOBAL_ARFLAGS := crsPD
 $(combo_var_prefix)GLOBAL_LD_DIRS :=
+
+ifeq ($(SUPPRES_UNUSED_WARNING),true)
+$(combo_var_prefix)GLOBAL_CFLAGS += -Wno-unused-parameter \
+                                    -Wno-unused-value \
+                                    -Wno-unused-function \
+                                    -Wno-unused-but-set-variable \
+                                    -Wno-maybe-uninitialized
+$(combo_var_prefix)RELEASE_CFLAGS += -Wno-unused-parameter \
+                                     -Wno-unused-value \
+                                     -Wno-unused-function \
+                                     -Wno-unused-but-set-variable \
+                                     -Wno-maybe-uninitialized
+$(combo_var_prefix)GLOBAL_CPPFLAGS += -Wno-unused-parameter \
+                                      -Wno-unused-value \
+                                      -Wno-unused-function \
+                                      -Wno-unused-but-set-variable \
+                                      -Wno-maybe-uninitialized
+endif
 
 $(combo_var_prefix)EXECUTABLE_SUFFIX :=
 $(combo_var_prefix)SHLIB_SUFFIX := .so
@@ -88,13 +112,25 @@ ifneq ($(USE_CCACHE),)
   # See http://petereisentraut.blogspot.com/2011/09/ccache-and-clang-part-2.html
   export CCACHE_CPP2 := true
 
-  CCACHE_HOST_TAG := $(HOST_PREBUILT_TAG)
-  # If we are cross-compiling Windows binaries on Linux
-  # then use the linux ccache binary instead.
-  ifeq ($(HOST_OS)-$(BUILD_OS),windows-linux)
-    CCACHE_HOST_TAG := linux-$(HOST_PREBUILT_ARCH)
+  # It has been shown that ccache 3.x using direct mode can be several times
+  # faster than using the current ccache 2.4 that is used by default
+  # use the system ccache if asked to, else default to the one in prebuilts
+
+  ifeq ($(USE_SYSTEM_CCACHE),)
+    ccache :=
+  else
+    ccache := $(shell which ccache)
   endif
-  ccache := prebuilts/misc/$(CCACHE_HOST_TAG)/ccache/ccache
+
+  ifeq ($(ccache),)
+    CCACHE_HOST_TAG := $(HOST_PREBUILT_TAG)
+    # If we are cross-compiling Windows binaries on Linux
+    # then use the linux ccache binary instead.
+    ifeq ($(HOST_OS)-$(BUILD_OS),windows-linux)
+      CCACHE_HOST_TAG := linux-$(HOST_PREBUILT_ARCH)
+    endif
+    ccache := prebuilts/misc/$(CCACHE_HOST_TAG)/ccache/ccache
+  endif
   # Check that the executable is here.
   ccache := $(strip $(wildcard $(ccache)))
   ifdef ccache

@@ -1,5 +1,4 @@
-#
-# Copyright (C) 2008 The Android Open Source Project
+# Copyright (C) 2014 The SaberMod Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,9 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# BUILD_ID is usually used to specify the branch name
-# (like "MAIN") or a branch name and a release candidate
-# (like "CRB01").  It must be a single word, and is
-# capitalized by convention.
 
-export BUILD_ID=LVY48C
+GRAPHITE_FLAGS := -fgraphite,-floop-flatten,-floop-parallelize-all,-ftree-loop-linear,-floop-interchange,-floop-strip-mine,-floop-block
+
+ifdef LOCAL_CFLAGS
+LOCAL_CFLAGS += $(call cc-option,$(GRAPHITE_FLAGS))
+else
+LOCAL_CFLAGS := $(call cc-option,$(GRAPHITE_FLAGS))
+endif
+
+ifdef LOCAL_CPPFLAGS
+LOCAL_CFLAGS += $(call cpp-option,$(GRAPHITE_FLAGS))
+else
+LOCAL_CPPFLAGS := $(call cpp-option,$(GRAPHITE_FLAGS))
+endif
+####

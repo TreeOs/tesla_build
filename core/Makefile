@@ -1727,12 +1727,6 @@ TESLA_TARGET_PACKAGE := $(PRODUCT_OUT)/$(TESLA_MOD_VERSION).zip
 
 .PHONY: otapackage tesla bootzip
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
-ifeq ($(USE_PREBUILT_CHROMIUM),1)
-ifneq ($(PRODUCT_PREBUILT_WEBVIEWCHROMIUM),yes)
-	@echo "Running Chromium prebuilt setup script..."
-	$(hide) . $(TOPDIR)vendor/tesla/utils/chromium_prebuilt.sh $(TOP)
-endif
-endif
 tesla: otapackage
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(TESLA_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(TESLA_TARGET_PACKAGE) > $(TESLA_TARGET_PACKAGE).md5sum
