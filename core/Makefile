@@ -1022,6 +1022,7 @@ INTERNAL_SYSTEMIMAGE_FILES := $(filter $(TARGET_OUT)/%, \
     $(PDK_FUSION_SYSIMG_FILES) \
     $(RECOVERY_RESOURCE_ZIP))
 
+ifeq ($(USE_SQUISHER),true)
 systemimage-squisher: $(INTERNAL_SYSTEMIMAGE_FILES)
 	@echo -e "Squishing this bad boy...!"
 	$(hide) APKCERTS=$(APKCERTS_FILE) ./vendor/tesla/tools/squisher
@@ -1029,6 +1030,10 @@ systemimage-squisher: $(INTERNAL_SYSTEMIMAGE_FILES)
 .PHONY: systemimage-squisher
 
 FULL_SYSTEMIMAGE_DEPS := $(INTERNAL_SYSTEMIMAGE_FILES) $(INTERNAL_USERIMAGES_DEPS) systemimage-squisher
+else
+FULL_SYSTEMIMAGE_DEPS := $(INTERNAL_SYSTEMIMAGE_FILES) $(INTERNAL_USERIMAGES_DEPS)
+endif
+
 # -----------------------------------------------------------------
 # installed file list
 # Depending on anything that $(BUILT_SYSTEMIMAGE) depends on.
