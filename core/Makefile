@@ -1022,7 +1022,7 @@ INTERNAL_SYSTEMIMAGE_FILES := $(filter $(TARGET_OUT)/%, \
     $(PDK_FUSION_SYSIMG_FILES) \
     $(RECOVERY_RESOURCE_ZIP))
 
-ifeq ($(USE_SQUISHER),true)
+ifeq ($(USE_SQUISHER),false)
 systemimage-squisher: $(INTERNAL_SYSTEMIMAGE_FILES)
 	@echo -e "Squishing this bad boy...!"
 	$(hide) APKCERTS=$(APKCERTS_FILE) ./vendor/tesla/tools/squisher
